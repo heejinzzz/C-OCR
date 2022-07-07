@@ -1,0 +1,76 @@
+body {
+    background-color: whitesmoke;
+    font-family: "Microsoft YaHei UI", serif;
+}
+
+.title {
+    text-align: center;
+}
+
+.inputBox {
+    background-color: white;
+    border: 2px dashed black;
+    text-align: center;
+    margin: 3% 40%;
+    padding: 5em;
+    border-radius: 10%;
+    cursor: pointer;
+}
+
+.inputBox:hover {
+    border: 5px dashed black;
+    font-weight: bolder;
+}
+
+.inputGuide {
+    margin: 20% auto;
+    font-size: xx-large;
+}
+
+.hiddenInput {
+    display: none;
+}
+
+.inputBtn {
+    text-align: center;
+    padding: 1em;
+    font-size: large;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 1% 0 1% 0;
+}
+
+.alert {
+    font-size: medium;
+    font-weight: bold;
+    color: red;
+    text-align: center;
+}
+
+h2 {
+    font-size: xxx-large;
+    font-weight: bold;
+    text-align: center;
+}
+
+.resultMsg {
+    font-size: xx-large;
+    font-weight: bold;
+    color: #da1327;
+    margin: 3% 0 2% 0;
+}
+
+.resultTextBox {
+    text-align: justify;
+    font-size: large;
+    padding: 0 25%;
+}
+
+.returnBtn {
+    text-align: center;
+    padding: 0.5em 1.5em;
+    font-size: large;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 4% 0 4% 0;
+}

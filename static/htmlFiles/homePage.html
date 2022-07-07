@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="/otherImages/logo.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/cssFiles/homePage.css">
+    <title>C-OCR</title>
+</head>
+<body>
+    <div class="title">
+        <img src="/otherImages/title.png">
+    </div>
+    <div id="board" style="text-align: center">
+        <div class="inputBox" id="inputBox">
+            <span class="inputGuide" id="inputGuide">选择图片</span>
+            <input type="file" accept="image/*" class="hiddenInput" id="hiddenInput">
+        </div>
+        <div style="text-align: center">
+            <button class="inputBtn" id="inputBtn">识别图片中的文字</button>
+        </div>
+    </div>
+
+</body>
+
+<script src="/jsFiles/jquery-3.6.0.js"></script>
+<script>
+    board = document.getElementById("board")
+    inputBox = document.getElementById("inputBox")
+    inputGuide = document.getElementById("inputGuide")
+    hiddenInput = document.getElementById("hiddenInput")
+    inputBtn = document.getElementById("inputBtn")
+    alertTag = 0
+    imageTypeList = ["jpg", "jpeg", "png"]
+
+    inputBox.addEventListener("click", selectImg)
+    function selectImg() {
+        hiddenInput.click()
+    }
+
+    hiddenInput.addEventListener("change", showFileSelected)
+    function showFileSelected() {
+        files = hiddenInput.files
+        if(files.length === 0) {
+            inputGuide.innerText = "选择图片"
+            inputGuide.setAttribute("style", "font-size: xx-large")
+        }else {
+            inputGuide.innerText = files[0].name
+            inputGuide.setAttribute("style", "font-size: medium")
+        }
+    }
+
+    inputBtn.addEventListener("click", submitImg)
+    function submitImg() {
+        files = hiddenInput.files
+        if(files.length === 0) {
+            if (alertTag === 1) {
+                return
+            }
+            if (alertTag === 0) {
+                alertMsg = document.createElement("div")
+                alertMsg.className = "alert"
+                alertMsg.id = "alertMsg"
+                alertMsg.innerText = "请先选择要识别的图片"
+                board.appendChild(alertMsg)
+            }else {
+                alertMsg = document.getElementById("alertMsg")
+                alertMsg.innerText = "请先选择要识别的图片"
+            }
+            alertTag = 1
+        }else {
+            file = files[0]
+            fileNameSplit = file.name.split(".")
+            fileType = fileNameSplit[fileNameSplit.length-1]
+            if(imageTypeList.indexOf(fileType) === -1) {
+                if (alertTag === 2) {
+                    return
+                }
+                if (alertTag === 0) {
+                    alertMsg = document.createElement("div")
+                    alertMsg.className = "alert"
+                    alertMsg.id = "alertMsg"
+                    alertMsg.innerText = "仅支持 “.jpg”、“.jpeg”、“.png” 格式图片"
+                    board.appendChild(alertMsg)
+                }else {
+                    alertMsg = document.getElementById("alertMsg")
+                    alertMsg.innerText = "仅支持 “.jpg”、“.jpeg”、“.png” 格式图片"
+                }
+                alertTag = 2
+            }else {
+                waitMsg = document.createElement("h2")
+                waitMsg.innerHTML = "<br>请稍等<br><br>正在识别中...."
+                board.innerHTML = ""
+                board.appendChild(waitMsg)
+
+                formData = new FormData()
+                formData.append("image", file)
+                $.ajax({
+                    type: "post",
+                    url: "/ocr",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    enctype: "multipart/form-data",
+                    success: showResult,
+                })
+                function showResult(data) {
+                    resultText = data["resultText"]
+                    resultImageName = data["resultImageName"]
+                    resultImage = document.createElement("img")
+                    resultImage.width = 1000
+                    resultImage.src = resultImageName
+                    resultMsg = document.createElement("div")
+                    resultMsg.className = "resultMsg"
+                    resultMsg.innerText = "识别文本："
+                    resultTextBox = document.createElement("div")
+                    resultTextBox.className = "resultTextBox"
+                    resultTextBox.innerText = resultText
+                    returnBtn = document.createElement("button")
+                    returnBtn.className = "returnBtn"
+                    returnBtn.innerText = "返回"
+                    returnBtn.addEventListener("click", function () {
+                        location.reload()
+                    })
+
+                    board.innerHTML = ""
+                    board.appendChild(resultImage)
+                    board.appendChild(resultMsg)
+                    board.appendChild(resultTextBox)
+                    board.appendChild(returnBtn)
+                }
+            }
+        }
+    }
+</script>
+
+</html>
