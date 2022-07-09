@@ -13,7 +13,7 @@ An online optical character recognition (OCR) website based on the gin framework
     cd C-OCR
 
 #### 三、使用consul
-安装并启动consul，将 paddleOCR-Server 提供的 paddleOCR 服务注册进consul中。
+安装并启动consul，将 paddleOCR-Server 提供的 paddleOCR 服务注册进consul中，推荐使用：[heejinzzz/consulTool](https://github.com/heejinzzz/consulTool)。
 
 #### 四、使用redis
 安装并启动redis。
